@@ -31,10 +31,10 @@ $params = @{
   UnversionedOutputDirectory = $true
 }
 Build-Module @params
-$path = (Get-Module -ListAvailable "UGDSB.PS.Google" | Where-Object {$_.Path -like "*$($global:Version)*"}).path
-if($path){
-  $directory = (Get-Item $Path).DirectoryName
-  $copyFrom = $moduleDir
-  $filesToCopy = Get-ChildItem -Path $copyFrom -recurse -Filter "*PS.Google.ps*"
-  $filesToCopy | Copy-Item -Destination $directory -Force
-}
+#$path = (Get-Module -ListAvailable "UGDSB.PS.Google" | Where-Object {$_.Path -like "*$($global:Version)*"}).path
+#if($path){
+#  $directory = (Get-Item $Path).DirectoryName
+#  $copyFrom = $moduleDir
+#  $filesToCopy = Get-ChildItem -Path $copyFrom -recurse -Filter "*PS.Google.ps*"
+#  $filesToCopy | Copy-Item -Destination $directory -Force
+#}
