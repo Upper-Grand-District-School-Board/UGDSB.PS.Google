@@ -6,7 +6,7 @@ function Get-GoogleAccessToken{
     [Parameter(Mandatory = $true)][string]$customerId,
     [Parameter(Mandatory = $true)][string[]]$scopes
   )
-  if($Global:googleAccessToken){
+  if($script:googleAccessToken){
     if(Test-GoogleAccessToken){return}
   }
   # COvert Private Key to Byte Stream
@@ -35,9 +35,9 @@ function Get-GoogleAccessToken{
     Body = "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=$jwt"
   }  
   $token = Invoke-WebRequest @tokenVars
-  $global:googleAccessToken = ($token.content | ConvertFrom-JSON).access_token
-  $global:googleCustomerId = $customerId
-  $global:googleClientEmail = $googleClientEmail
-  $global:googlePK = $private_key
-  $global:googleScopes = $scopes
+  $script:googleAccessToken = ($token.content | ConvertFrom-JSON).access_token
+  $script:googleCustomerId = $customerId
+  $script:googleClientEmail = $googleClientEmail
+  $script:googlePK = $private_key
+  $script:googleScopes = $scopes
 }

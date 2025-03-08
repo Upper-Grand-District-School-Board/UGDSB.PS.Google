@@ -16,12 +16,12 @@ function Get-GoogleUser {
     [Parameter()][switch]$all
   )
   # Ensure that they have a access token
-  if(-not $global:googleAccessToken){
+  if(-not $script:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
+    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
   }  
   $uriparts = [System.Collections.Generic.List[PSCustomObject]]@()  
   if ($PSBoundParameters.ContainsKey("userKey")) { 
@@ -29,7 +29,7 @@ function Get-GoogleUser {
   }
   else {
     $endpoint = "admin/directory/v1/users"
-    $uriparts.add("customer=$($global:googleCustomerId)")
+    $uriparts.add("customer=$($script:googleCustomerId)")
   }
   if ($PSBoundParameters.ContainsKey("domain")) { $uriparts.add("domain=$($domain)") }
   if ($PSBoundParameters.ContainsKey("userevent")) { $uriparts.add("event=$($userevent)") }

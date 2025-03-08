@@ -14,7 +14,7 @@ function Get-GoogleAPI{
       StatusCodeVariable    = 'statusCode'
     }
     $headers = @{
-      authorization = "Bearer $($Global:googleAccessToken)"
+      authorization = "Bearer $($script:googleAccessToken)"
       "content-type" = "application/json"
     }
     if ($PSBoundParameters.ContainsKey("body")) { 
@@ -24,7 +24,7 @@ function Get-GoogleAPI{
     $results = Invoke-RestMethod @Vars -Headers $headers
   }
   catch {
-    $ErrorMsg = $global:Error[0]
+    $ErrorMsg = $script:Error[0]
     return $ErrorMsg
   }
   return [PSCustomObject]@{

@@ -1,19 +1,20 @@
-﻿#Region '.\Public\Disable-Chromebook.ps1' 0
+﻿#Region '.\Public\Disable-Chromebook.ps1' -1
+
 function Disable-Chromebook{
   [CmdletBinding()]
   param(
     [Parameter(Mandatory = $true)][string]$deviceID
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }  
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }  
   # Generate the final API endppoint URI
-  $endpoint = "admin/directory/v1/customer/$($script:googleCustomerId)/devices/chromeos/$($deviceID)/action"
+  $endpoint = "admin/directory/v1/customer/$($global:googleCustomerId)/devices/chromeos/$($deviceID)/action"
   $body = @{
     "action" = "disable"
   }
@@ -29,7 +30,8 @@ function Disable-Chromebook{
   }
 }
 #EndRegion '.\Public\Disable-Chromebook.ps1' 30
-#Region '.\Public\Disable-GoogleUser.ps1' 0
+#Region '.\Public\Disable-GoogleUser.ps1' -1
+
 function Disable-GoogleUser {
   [CmdletBinding()]
   [OutputType([System.Collections.Generic.List[PSCustomObject]])]
@@ -37,12 +39,12 @@ function Disable-GoogleUser {
     [parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$userKey
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }
   $endpoint = "admin/directory/v1/users/$($userKey)"
   $body = @{
@@ -52,22 +54,23 @@ function Disable-GoogleUser {
   return $results.results
 }
 #EndRegion '.\Public\Disable-GoogleUser.ps1' 22
-#Region '.\Public\Enable-Chromebook.ps1' 0
+#Region '.\Public\Enable-Chromebook.ps1' -1
+
 function Enable-Chromebook{
   [CmdletBinding()]
   param(
     [Parameter(Mandatory = $true)][string]$deviceID
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }  
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }  
   # Generate the final API endppoint URI
-  $endpoint = "admin/directory/v1/customer/$($script:googleCustomerId)/devices/chromeos/$($deviceID)/action"
+  $endpoint = "admin/directory/v1/customer/$($global:googleCustomerId)/devices/chromeos/$($deviceID)/action"
   $body = @{
     "action" = "reenable"
   }
@@ -83,7 +86,8 @@ function Enable-Chromebook{
   }
 }
 #EndRegion '.\Public\Enable-Chromebook.ps1' 30
-#Region '.\Public\Enable-GoogleUser.ps1' 0
+#Region '.\Public\Enable-GoogleUser.ps1' -1
+
 function Enable-GoogleUser {
   [CmdletBinding()]
   [OutputType([System.Collections.Generic.List[PSCustomObject]])]
@@ -91,12 +95,12 @@ function Enable-GoogleUser {
     [parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$userKey
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }
   $endpoint = "admin/directory/v1/users/$($userKey)"
   $body = @{
@@ -106,7 +110,8 @@ function Enable-GoogleUser {
   return $results.results
 }
 #EndRegion '.\Public\Enable-GoogleUser.ps1' 22
-#Region '.\Public\Get-ChromeDevices.ps1' 0
+#Region '.\Public\Get-ChromeDevices.ps1' -1
+
 <#
   .DESCRIPTION
   This cmdlet will retrive chrome OS devices
@@ -144,14 +149,14 @@ function Get-ChromeDevices{
     [Parameter()][switch]$all
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   } 
-  $endpoint = "admin/directory/v1/customer/$($script:googleCustomerId)/devices/chromeos" 
+  $endpoint = "admin/directory/v1/customer/$($global:googleCustomerId)/devices/chromeos" 
   $uriparts = [System.Collections.Generic.List[PSCustomObject]]@()
   if ($PSBoundParameters.ContainsKey("maxResults")) { $uriparts.add("maxResults=$($maxResults)") }
   if ($PSBoundParameters.ContainsKey("orderBy")) { $uriparts.add("orderBy=$($orderBy)") }
@@ -177,7 +182,8 @@ function Get-ChromeDevices{
   return $data
 }
 #EndRegion '.\Public\Get-ChromeDevices.ps1' 70
-#Region '.\Public\Get-GoogleAccessToken.ps1' 0
+#Region '.\Public\Get-GoogleAccessToken.ps1' -1
+
 function Get-GoogleAccessToken{
   [CmdletBinding()]
   param(
@@ -186,7 +192,7 @@ function Get-GoogleAccessToken{
     [Parameter(Mandatory = $true)][string]$customerId,
     [Parameter(Mandatory = $true)][string[]]$scopes
   )
-  if($script:googleAccessToken){
+  if($Global:googleAccessToken){
     if(Test-GoogleAccessToken){return}
   }
   # COvert Private Key to Byte Stream
@@ -215,14 +221,15 @@ function Get-GoogleAccessToken{
     Body = "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=$jwt"
   }  
   $token = Invoke-WebRequest @tokenVars
-  $script:googleAccessToken = ($token.content | ConvertFrom-JSON).access_token
-  $script:googleCustomerId = $customerId
-  $script:googleClientEmail = $googleClientEmail
-  $script:googlePK = $private_key
-  $script:googleScopes = $scopes
+  $global:googleAccessToken = ($token.content | ConvertFrom-JSON).access_token
+  $global:googleCustomerId = $customerId
+  $global:googleClientEmail = $googleClientEmail
+  $global:googlePK = $private_key
+  $global:googleScopes = $scopes
 }
 #EndRegion '.\Public\Get-GoogleAccessToken.ps1' 44
-#Region '.\Public\Get-GoogleAPI.ps1' 0
+#Region '.\Public\Get-GoogleAPI.ps1' -1
+
 function Get-GoogleAPI{
   [CmdletBinding()]
   [OutputType([System.Collections.Generic.List[PSCustomObject]])]
@@ -239,7 +246,7 @@ function Get-GoogleAPI{
       StatusCodeVariable    = 'statusCode'
     }
     $headers = @{
-      authorization = "Bearer $($script:googleAccessToken)"
+      authorization = "Bearer $($Global:googleAccessToken)"
       "content-type" = "application/json"
     }
     if ($PSBoundParameters.ContainsKey("body")) { 
@@ -249,7 +256,7 @@ function Get-GoogleAPI{
     $results = Invoke-RestMethod @Vars -Headers $headers
   }
   catch {
-    $ErrorMsg = $script:Error[0]
+    $ErrorMsg = $global:Error[0]
     return $ErrorMsg
   }
   return [PSCustomObject]@{
@@ -258,7 +265,8 @@ function Get-GoogleAPI{
   } 
 }
 #EndRegion '.\Public\Get-GoogleAPI.ps1' 35
-#Region '.\Public\Get-GoogleOU.ps1' 0
+#Region '.\Public\Get-GoogleOU.ps1' -1
+
 function Get-GoogleOU{
   [CmdletBinding()]
   [OutputType([System.Collections.Generic.List[PSCustomObject]])]
@@ -267,14 +275,14 @@ function Get-GoogleOU{
     [Parameter()][string]$orgUnitPath
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }
-  $endpoint = "admin/directory/v1/customer/$($script:googleCustomerId)/orgunits"
+  $endpoint = "admin/directory/v1/customer/$($global:googleCustomerId)/orgunits"
   $uriparts = [System.Collections.Generic.List[PSCustomObject]]@()
   if ($PSBoundParameters.ContainsKey("type")) { $uriparts.add("type=$($type)") }
   if ($PSBoundParameters.ContainsKey("orgUnitPath")) { $uriparts.add("orgUnitPath=$($orgUnitPath)") }
@@ -284,7 +292,8 @@ function Get-GoogleOU{
   return $orglist.results.organizationUnits
 }
 #EndRegion '.\Public\Get-GoogleOU.ps1' 25
-#Region '.\Public\Get-GoogleUser.ps1' 0
+#Region '.\Public\Get-GoogleUser.ps1' -1
+
 function Get-GoogleUser {
   [CmdletBinding()]
   [OutputType([System.Collections.Generic.List[PSCustomObject]])]
@@ -303,12 +312,12 @@ function Get-GoogleUser {
     [Parameter()][switch]$all
   )
   # Ensure that they have a access token
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   # Confirm we have a valid access token
   if(-not $(Test-GoogleAccessToken)){
-    Get-GoogleAccessToken -private_key $script:googlePK -client_email $script:googleClientEmail -customerid  $script:googleCustomerId -scopes $script:googleScopes
+    Get-GoogleAccessToken -private_key $global:googlePK -client_email $global:googleClientEmail -customerid  $global:googleCustomerId -scopes $global:googleScopes
   }  
   $uriparts = [System.Collections.Generic.List[PSCustomObject]]@()  
   if ($PSBoundParameters.ContainsKey("userKey")) { 
@@ -316,7 +325,7 @@ function Get-GoogleUser {
   }
   else {
     $endpoint = "admin/directory/v1/users"
-    $uriparts.add("customer=$($script:googleCustomerId)")
+    $uriparts.add("customer=$($global:googleCustomerId)")
   }
   if ($PSBoundParameters.ContainsKey("domain")) { $uriparts.add("domain=$($domain)") }
   if ($PSBoundParameters.ContainsKey("userevent")) { $uriparts.add("event=$($userevent)") }
@@ -352,15 +361,16 @@ function Get-GoogleUser {
   return $data
 }
 #EndRegion '.\Public\Get-GoogleUser.ps1' 67
-#Region '.\Public\Test-GoogleAccessToken.ps1' 0
+#Region '.\Public\Test-GoogleAccessToken.ps1' -1
+
 function Test-GoogleAccessToken{
   [CmdletBinding()]
   param()
-  if(-not $script:googleAccessToken){
+  if(-not $global:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   try{
-    $endpoint = "https://oauth2.googleapis.com/tokeninfo?access_token=$($script:googleAccessToken)"
+    $endpoint = "https://oauth2.googleapis.com/tokeninfo?access_token=$($Global:googleAccessToken)"
     $tokenDetails = Invoke-RestMethod -Method "GET" -URI $endpoint -StatusCodeVariable statusCode
     if([int]$tokenDetails.expires_in -gt 900){
       Write-Verbose "Token is valid for more than 15 minutes, not getting new token."

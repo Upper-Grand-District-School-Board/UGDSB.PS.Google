@@ -1,11 +1,11 @@
 function Test-GoogleAccessToken{
   [CmdletBinding()]
   param()
-  if(-not $global:googleAccessToken){
+  if(-not $script:googleAccessToken){
     throw "Please ensure that you have called Get-GoogleAccessToken cmdlet"
   }
   try{
-    $endpoint = "https://oauth2.googleapis.com/tokeninfo?access_token=$($Global:googleAccessToken)"
+    $endpoint = "https://oauth2.googleapis.com/tokeninfo?access_token=$($script:googleAccessToken)"
     $tokenDetails = Invoke-RestMethod -Method "GET" -URI $endpoint -StatusCodeVariable statusCode
     if([int]$tokenDetails.expires_in -gt 900){
       Write-Verbose "Token is valid for more than 15 minutes, not getting new token."
